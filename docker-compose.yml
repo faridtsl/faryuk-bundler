@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  faryuk-backend:
+    image: faryuk-backend
+    hostname: faryuk-backend
+    build:
+      context: ./faryuk-backend
+      dockerfile: Dockerfile
+    depends_on:
+      - faryuk-db
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${FARYUK_ROOT}/config.yml:/go/src/faryuk/config.yml
+      - ${FARYUK_ROOT}/ports:/go/src/faryuk/ressources/ports
+      - ${FARYUK_ROOT}/dirs:/go/src/faryuk/ressources/dirs
+      - ${FARYUK_ROOT}/subdomains:/go/src/faryuk/ressources/subdomains
+
+  faryuk-frontend:
+    image: faryuk-frontend
+    hostname: faryuk-frontend
+    build:
+      context: ./faryuk-frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - faryuk-backend
+    ports:
+      - "3000:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+
+  faryuk-db:
+    image: mongo:4.4.6
+    hostname: faryuk-db
+    environment:
+      - PUID=1000
+      - GUID=1000
+    volumes:
+      - ${FARYUK_ROOT}/mongodb/data:/data/db
+

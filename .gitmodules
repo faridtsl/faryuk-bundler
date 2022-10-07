@@ -1,0 +1,6 @@
+[submodule "faryuk-backend"]
+	path = faryuk-backend
+	url = https://github.com/faridtsl/faryuk-backend
+[submodule "faryuk-frontend"]
+	path = faryuk-frontend
+	url = https://github.com/faridtsl/faryuk-frontend
